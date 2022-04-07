@@ -1,7 +1,7 @@
 # Rest API Adeudos
 ---
 ## Problema a resolver
-La comunidad de "El palomar " queriere saber cual es el adeudo de Administracion por domicilio, esto se expresa de manera anual en una vista de una aplicación y un sitio web. Este microservicio debe pintar el Mes, Monto del Adeudo y Estado [Pendiente, Pagado, Atrasado]. Los usuarios pueden varios meses al mismo tiempo. 
+La comunidad de "El palomar " queriere saber cual es el adeudo de Administracion por domicilio, esto se expresa de manera anual en una vista de una aplicación y un sitio web. Este microservicio debe pintar el Mes, Monto del Adeudo y Estado [Pendiente, Pagado, Atrasado]. Los usuarios pueden ver varios meses al mismo tiempo. 
 
 #### Casos de uso
 * Los usuarios podrán registrarse y acceder a sus sesiones en la api.
