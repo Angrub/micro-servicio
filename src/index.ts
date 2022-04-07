@@ -34,5 +34,5 @@ app.listen(PORT, () => {
 });
 
 app.get('/', (req, res) => {
-    res.send('my first server on docker :D');
+    res.send('App on docker container :D');
 });
