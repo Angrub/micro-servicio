@@ -1,0 +1,327 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Adeudos Api",
+    "description": "Rest Api para la consulta de adeudos por vivienda, suponiendo que el usuario sólo puede acceder a los adeudos de su vivienda. Autenticación con passport.js y Jwt.",
+    "version": "1.0.0",
+    "contact": {
+      "email": "angrub1810@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://mit-license.org/"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Autenticación"
+    },
+    {
+      "name": "users",
+      "description": "Operaciones con usuarios"
+    },
+    {
+      "name": "debts",
+      "description": "Consulta y creación de adeudos"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Registra un nuevo usuario",
+        "description": "Al completarse la petición satisfactoriamente devuelve un token para la autenticación.",
+        "operationId": "createUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "auth",
+            "description": "Objeto auth",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Auth"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Inicia sesión con un usuario existente",
+        "description": "Al completarse la petición satisfactoriamente devuelve un token para la autenticación.",
+        "operationId": "getAuthUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "auth",
+            "description": "Objeto auth",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Auth"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Obtiene los usuarios registrados",
+        "description": "Lista todos los usuarios existentes; no requiere autenticación. Muestra el hash de la contraseña.",
+        "operationId": "getUsers",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Users"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid tag value"
+          }
+        }
+      }
+    },
+    "/users/:{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Obtiene un usuario",
+        "description": "Obtiene el usuario que corresponda al id de la petición.",
+        "operationId": "getUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID de usuario",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          }
+        }
+      }
+    },
+    "/debts": {
+      "get": {
+        "tags": [
+          "debts"
+        ],
+        "summary": "Obtiene los adeudos del usuario",
+        "description": "Obtiene los adeudos del usuario. Requiere autenticación.",
+        "operationId": "getDebts",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "token de sesión",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Debts"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "debts"
+        ],
+        "summary": "Crea un nuevo adeudo",
+        "description": "Crea adeudos a las sesiones registradas",
+        "operationId": "createDebt",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "auth",
+            "description": "Objeto Adeudo",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Debt"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Debts"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Auth": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "Users": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Debts": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "description": "Debt Status",
+          "enum": [
+            "Pagado",
+            "Pendiente",
+            "Atrasado"
+          ]
+        }
+      }
+    },
+    "Debt": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "description": "Debt Status",
+          "enum": [
+            "Pagado",
+            "Pendiente",
+            "Atrasado"
+          ]
+        }
+      }
+    }
+  }
+}

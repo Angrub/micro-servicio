@@ -1,0 +1,31 @@
+
+services:
+    app: 
+        image: node-app-dev
+        environment:
+            - API_PORT=3000
+            - MONGO_URL=mongodb://db:27017/appStorage
+            - JWT_SECRET=123123
+            - MC_URL=http://microservice:3001
+        depends_on:
+            - db
+            - microservice
+        ports:
+            - "3000:3000"
+        volumes:
+            - .:/usr/src
+    db:
+        image: mongo:4.4.13
+
+    microservice:
+        image: node-mc-dev
+        environment:
+            - PORT=3001
+            - MONGO_URL=mongodb://microservice-db:27017/debts
+            - JWT_SECRET=123123
+        depends_on:
+            - microservice-db
+        volumes:
+            - ./debts-microservice:/usr/src
+    microservice-db:
+        image: mongo:4.4.13
